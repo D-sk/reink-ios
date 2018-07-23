@@ -38,14 +38,12 @@ class QRCodeView: AbstractView {
         self.delegate?.closeButtonDidTap()
     }
     
-    func setQRCode(account:Account) {
+    func setQRCode(with data:Data) {
         
-        if let data = account.qrCodeData(){
-            let qr = CIFilter(name: "CIQRCodeGenerator", withInputParameters: ["inputMessage": data, "inputCorrectionLevel": "L"])!
-            let sizeTransform = CGAffineTransform(scaleX: 4, y: 4)
-            let qrImage = qr.outputImage!.applying(sizeTransform)
-            self.imageView.image = UIImage(ciImage: qrImage)
-        }
+        let qr = CIFilter(name: "CIQRCodeGenerator", withInputParameters: ["inputMessage": data, "inputCorrectionLevel": "L"])!
+        let sizeTransform = CGAffineTransform(scaleX: 4, y: 4)
+        let qrImage = qr.outputImage!.applying(sizeTransform)
+        self.imageView.image = UIImage(ciImage: qrImage)
         
     }
     

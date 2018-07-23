@@ -110,12 +110,8 @@ class GroupFlipViewController: FlipViewController {
                                                name: .UIApplicationDidEnterBackground,
                                                object: nil)
         
-        if  UserDefaultsManager.shared.passcode && UserDefaultsManager.shared.isFirstLogin == false{
-            self.view.alpha = 0.0
-        }
-
-
         self.syncContacts()
+        self.localAuthIfNeeded()
     }
     
     override func didReceiveMemoryWarning() {
@@ -123,9 +119,9 @@ class GroupFlipViewController: FlipViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         
         if UserDefaultsManager.shared.isFirstLogin {
             let vc = HelpListViewController.instantiate()
@@ -149,65 +145,16 @@ class GroupFlipViewController: FlipViewController {
                 }, cancelHandler: nil), animated: true, completion: nil)
             }
         }
-        
     }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if self.view.alpha == 0.0 {
-            self.localAuthentication()
-        }
         if _groups == nil {
             self.container = _containerView
             _groups = RealmManager.shared.groups()
         }
         self.setTextFieldWidth()
-    }
-
-    private func localAuthentication(){
-        self.view.alpha = 1.0
-        self.presentedViewController?.view.alpha = 1.0
-        if !(self.presentedViewController is LocalAuthViewController){
-            self.performSegue(withIdentifier: "LocalAuthentication", sender: self)
-        }
-    }
-
-    fileprivate func setNavigationBar () {
-        self.navigationItem.leftBarButtonItem = self.leftBarButtonItem()
-        self.navigationItem.rightBarButtonItem = self.rightBarButtonItem()
-        self.setTextFieldWidth()
-    }
-    
-
-    private func setTextFieldWidth() {
-        guard let frame = self.navigationController?.navigationBar.frame else {
-            _textField.frame.size.width = 0.0
-            return
-        }
-
-        if _textField.isFirstResponder {
-            _textField.frame.size.width = frame.width - frame.height
-        } else {
-            _textField.frame.size.width = frame.width - frame.height*2
-        }
-    }
-    
-    private func rightBarButtonItem()-> UIBarButtonItem? {
-        if _textField.isFirstResponder {
-            return UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.removeSearchViewController))
-        } else {
-            return UIBarButtonItem(image: #imageLiteral(resourceName: "BarItemProfile"), style: .plain, target: self, action: #selector(self.presentQRScan))
-        }
-        
-    }
-
-    private func leftBarButtonItem()-> UIBarButtonItem? {
-        if _textField.isFirstResponder {
-            return nil
-        } else {
-            return UIBarButtonItem(image: #imageLiteral(resourceName: "BarItemMenu"), style: .plain, target: self, action: #selector(self.presentMyPage))
-        }
-        
     }
 
     
@@ -218,25 +165,30 @@ class GroupFlipViewController: FlipViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "LocalAuthentication" {
-            
             var error:NSError?
             if LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: &error){
                 let vc = LocalAuthViewController.instantiate()
-//                if self.presentedViewController != nil {
-//                    self.presentedViewController!.present(vc, animated: false, completion: nil)
-//                } else {
-//                    self.present(vc, animated: false, completion: nil)
-//                }
+                if self.presentedViewController != nil {
+                    self.presentedViewController!.present(vc, animated: false, completion: {
+                        self.setFrontViewIsHidden(isHidden: false)
+                    })
+                } else {
+                    self.present(vc, animated: false, completion: {
+                        self.setFrontViewIsHidden(isHidden: false)
+                    })
+                }
+            } else if error != nil {
+                self.presentAlertController(with: error!)
             }
+            
         } else if segue.identifier == "presentMyPage" {
             self.present(_drawerViewController, animated: true, completion: nil)
         }
     }
 
     @objc private func appWillEnterForeground() {
-        if self.view.alpha == 0.0 {
-            self.localAuthentication()
-        }
+        self.registerNotification()
+        self.localAuthIfNeeded()
         self.syncContacts()
     }
     
@@ -249,54 +201,55 @@ class GroupFlipViewController: FlipViewController {
             if vc is SFSafariViewController {
                 vc!.dismiss(animated: false, completion: nil)
             }
-            self.view.alpha = 0.0
-            self.presentedViewController?.view.alpha = 0.0
         }
+        self.setFrontViewIsHidden(isHidden: self.isPassCodeEnabled())
     }
 
-    func registerNotification() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { granted, error in
-            guard error == nil else {
-                return
-            }
-            if granted {
-                DispatchQueue.main.async(execute: {
-                    UIApplication.shared.registerForRemoteNotifications()
-                })
-            }
+    private func setTextFieldWidth() {
+        guard let frame = self.navigationController?.navigationBar.frame else {
+            _textField.frame.size.width = 0.0
+            return
         }
-    }
-
-    func syncContacts(){
-        Friend.list(onSuccess:{
-            
-        }, onFailure:{ [weak self] err in
-            self?.presentAlertController(with: err)
-            
-        })
-        CNContactManager.shared.sync()
-    }
-    
-    func refreshContents() {
-        for sv in _scrollView.subviews {
-            sv.removeFromSuperview()
+        
+        if _textField.isFirstResponder {
+            _textField.frame.size.width = frame.width - frame.height
+        } else {
+            _textField.frame.size.width = frame.width - frame.height*2
         }
-        self.tabIndex = 0
-        self.viewControllers.removeAll()
-        self.setViewControllers()
-    }
-    
-
-    @objc fileprivate func presentMyPage() {
-        self.performSegue(withIdentifier: "presentMyPage", sender: self)
     }
 
     @objc fileprivate func presentQRScan() {
         self.performSegue(withIdentifier: "presentQRScan", sender: self)
     }
     
-    @objc private func removeSearchViewController() {
+    private func rightBarButtonItem()-> UIBarButtonItem? {
+        if _textField.isFirstResponder {
+            return UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.removeSearchViewController))
+        } else {
+            return UIBarButtonItem(image: #imageLiteral(resourceName: "BarItemProfile"), style: .plain, target: self, action: #selector(self.presentQRScan))
+        }
+    }
+    
+    @objc fileprivate func presentMyPage() {
+        self.performSegue(withIdentifier: "presentMyPage", sender: self)
+    }
+    
+    private func leftBarButtonItem()-> UIBarButtonItem? {
+        if _textField.isFirstResponder {
+            return nil
+        } else {
+            return UIBarButtonItem(image: #imageLiteral(resourceName: "BarItemMenu"), style: .plain, target: self, action: #selector(self.presentMyPage))
+        }
+    }
 
+    private func setNavigationBar () {
+        self.navigationItem.leftBarButtonItem = self.leftBarButtonItem()
+        self.navigationItem.rightBarButtonItem = self.rightBarButtonItem()
+        self.setTextFieldWidth()
+    }
+
+    @objc private func removeSearchViewController() {
+        
         if _textField.isFirstResponder {
             _textField.resignFirstResponder()
         }
@@ -313,7 +266,7 @@ class GroupFlipViewController: FlipViewController {
     }
     
     private func addSearchViewController() {
-
+        
         if _searchViewController == nil {
             _searchViewController = ContactListViewController.instantiate()
             _searchViewController.view.frame.size.height = self.view.frame.height-_scrollView.frame.minY
@@ -330,6 +283,55 @@ class GroupFlipViewController: FlipViewController {
         _searchViewController.didMove(toParentViewController: self)
         
         self.setNavigationBar()
+    }
+    
+    private func isPassCodeEnabled() -> Bool {
+        return UserDefaultsManager.shared.passcode && UserDefaultsManager.shared.isFirstLogin == false
+    }
+
+    private func setFrontViewIsHidden(isHidden:Bool) {
+        if let v = self.presentedViewController?.view {
+            v.isHidden = isHidden
+        }
+        _containerView.isHidden = isHidden
+    }
+    
+    func localAuthIfNeeded() {
+        if (self.presentedViewController is LocalAuthViewController) {
+            self.setFrontViewIsHidden(isHidden:false)
+        } else if self.isPassCodeEnabled() {
+            self.setFrontViewIsHidden(isHidden:true)
+            self.performSegue(withIdentifier: "LocalAuthentication", sender: self)
+        }
+    }
+
+    func registerNotification() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { granted, error in
+            guard error == nil else {
+                return
+            }
+            if granted {
+                DispatchQueue.main.async(execute: {
+                    UIApplication.shared.registerForRemoteNotifications()
+                })
+            }
+        }
+    }
+    
+    func syncContacts(){
+        Friend.list(onSuccess:nil, onFailure:{ [weak self] err in
+            self?.presentAlertController(with: err)
+        })
+        CNContactManager.shared.sync()
+    }
+    
+    func refreshContents() {
+        for sv in _scrollView.subviews {
+            sv.removeFromSuperview()
+        }
+        self.tabIndex = 0
+        self.viewControllers.removeAll()
+        self.setViewControllers()
     }
 
     @IBAction func textFeildEditingDidBegin(_ sender: Any) {

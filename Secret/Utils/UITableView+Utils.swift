@@ -34,5 +34,4 @@ extension UITableView {
         self.backgroundView = blurEffectView
         self.separatorEffect = UIVibrancyEffect(blurEffect: blurEffect)
     }
-
 }

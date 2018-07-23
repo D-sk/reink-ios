@@ -13,9 +13,9 @@ class APIManager: NSObject {
     public static let shared: APIManager = APIManager()
 
 #if DEBUG
-    static let endPoint = "http://localhost:8000"
+    static let endPoint = "https://api.reink.tokyo"
 #else
-    static let endPoint = "https://n2p-api.fiole.co"
+    static let endPoint = "https://api.reink.tokyo"
 #endif
     
     enum AuthRequest: String{
@@ -25,8 +25,9 @@ class APIManager: NSObject {
         case login = "login"
         case logout = "logout"
         case refresh = "refresh"
-        
-        case users = "users"
+        case email = "update_email"
+        case password = "update_password"
+        case withdraw = "withdraw"
         
         func urlString() -> String {
             return endPoint + "/auth/v1/" + self.rawValue + "/"
@@ -72,7 +73,6 @@ class APIManager: NSObject {
                 case 2:
                     onSuccess(content)
                 default:
-                    debugPrint(content)
                     let e = NSError(domain: Consts.appErrDomain, code:statusCode, userInfo: content)
                     onFailure(e)
                 }
@@ -132,6 +132,9 @@ class APIManager: NSObject {
         })
     }
 
+    func error() -> NSError {
+        return NSError(domain: Consts.appErrDomain, code: 500, userInfo: nil)
+    }
 }
 
 //// Authentication ////
@@ -139,17 +142,13 @@ class APIManager: NSObject {
 extension APIManager {
     
     //POST
-    func register(uname:String, pass:String, onSuccess:@escaping(String, String)->Void, onFailure:@escaping(_ error:NSError)->Void){
+    func register(uname:String, pass:String, onSuccess:@escaping(Dictionary<String,Any>)->Void, onFailure:@escaping(_ error:NSError)->Void){
         let urlString = AuthRequest.register.urlString()
         let params = ["username":uname, "password":pass]
         
         self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: {dict in
-            guard let uname = dict["username"] as? String, let uuid = dict["uuid"] as? String else {
-                let err = NSError(domain: Consts.appErrDomain, code: 500, userInfo: nil)
-                onFailure(err)
-                return
-            }
-            onSuccess(uname, uuid)
+
+            onSuccess(dict)
             
         },onFailure: {error in
             onFailure(error)
@@ -157,35 +156,47 @@ extension APIManager {
     }
 
     func codeRequest(email:String, onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
+        
         let urlString = AuthRequest.cdereq.urlString()
+        guard let user = RealmManager.shared.user() else {
+            let err = NSError(domain: Consts.appErrDomain, code: 500, userInfo: nil)
+            onFailure(err)
+            return
+        }
+
         let params = [
-            "uuid":KeychainManager.shared.uuid,
-            "email":email
+            "uuid": user.uuid,
+            "email": email
         ]
         
-        self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: {dict in
+        self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: { dict in
             onSuccess()
         },onFailure: {error in
             onFailure(error)
         })
     }
     
-    func activate(code:String, onSuccess:@escaping(String)->Void, onFailure:@escaping(_ error:NSError)->Void){
+    func activate(code:String, onSuccess:@escaping(String, String)->Void, onFailure:@escaping(_ error:NSError)->Void){
+        
         let urlString = AuthRequest.activate.urlString()
+        guard let user = RealmManager.shared.user() else {
+            onFailure(self.error())
+            return
+        }
+        
         let params = [
-            "uuid":KeychainManager.shared.uuid,
-            "username":KeychainManager.shared.uname,
+            "uuid": user.uuid,
+            "username": user.uname,
             "code":code
         ]
         
         self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: {dict in
             
-            guard let token = dict["token"] as? String else {
-                let err = NSError(domain: Consts.appErrDomain, code: 500, userInfo: nil)
-                onFailure(err)
+            guard let email = dict["email"] as? String, let token = dict["token"] as? String else {
+                onFailure(self.error())
                 return
             }
-            onSuccess(token)
+            onSuccess(email, token)
             
         },onFailure: {error in
             onFailure(error)
@@ -198,8 +209,7 @@ extension APIManager {
         self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: {dict in
             
             guard let user = dict["user"] as? Dictionary<String,Any>, let token = dict["token"] as? String else {
-                let err = NSError(domain: Consts.appErrDomain, code: 500, userInfo: nil)
-                onFailure(err)
+                onFailure(self.error())
                 return
             }
             onSuccess(user, token)
@@ -213,7 +223,6 @@ extension APIManager {
     func logout(onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
         let urlString = AuthRequest.logout.urlString()
         self.apiRequest(.post, URLString: urlString, parameters: nil, encoding: URLEncoding.default, onSuccess: { dict in
-            resetAll()
             onSuccess()
         },onFailure: {error in
             onFailure(error)
@@ -226,8 +235,7 @@ extension APIManager {
         self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: { dict in
             
             guard let token = dict["token"] as? String else {
-                let err = NSError(domain: Consts.appErrDomain, code: 500, userInfo: nil)
-                onFailure(err)
+                onFailure(self.error())
                 return
             }
             
@@ -239,23 +247,31 @@ extension APIManager {
         })
     }
     
-    //GET
-    func user(onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
-        let urlString = AuthRequest.users.urlString()
-        self.apiRequest(.get, URLString: urlString, parameters: nil, encoding: URLEncoding.default, onSuccess: { dict in
-            resetAll()
+    //PATCH
+    func updateEmail(email:String, password:String, onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
+        let urlString = AuthRequest.email.urlString()
+        let params = ["email":email, "password":password]
+        self.apiRequest(.patch, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: {dict in
+            
             onSuccess()
+            
         },onFailure: {error in
             onFailure(error)
         })
     }
 
-    //PATCH
-    func updatePassword(password:String, onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
-        let urlString = AuthRequest.users.urlString()
-        let params = ["password":password]
+    func updatePassword(current:String, new:String, onSuccess:@escaping(String)->Void, onFailure:@escaping(_ error:NSError)->Void){
+        let urlString = AuthRequest.password.urlString()
+        let params = ["current":current, "new":new]
         self.apiRequest(.patch, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: {dict in
-            onSuccess()
+            
+            guard let token = dict["token"] as? String else {
+                onFailure(self.error())
+                return
+            }
+            
+            onSuccess(token)
+
         },onFailure: {error in
             onFailure(error)
         })
@@ -263,7 +279,7 @@ extension APIManager {
     
     //DELETE
     func withdraw(onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
-        let urlString = AuthRequest.users.urlString()
+        let urlString = AuthRequest.withdraw.urlString()
         self.apiRequest(.delete, URLString: urlString, parameters: nil, encoding: URLEncoding.default, onSuccess: {dict in
             onSuccess()
         },onFailure: {error in
@@ -344,15 +360,14 @@ extension APIManager {
 // Devices
 extension APIManager {
     
-    //PUT
+    //POST
     func updateDeviceToken(_ token:String, onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
         let urlString = SecretRequest.devices.urlString()
         let params:[String : Any] = [
-            "platform":1,
-            "device_token":token
+            "token":token
         ]
         
-        self.apiRequest(.put, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: { _ in
+        self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: { _ in
             onSuccess()
         },onFailure: {error in
             onFailure(error)
@@ -368,7 +383,7 @@ extension APIManager {
         guard let receipt = StoreManager.shared.receiptString else {
             return nil
         }
-        return [ "receipt_data": receipt, "platform": 1]
+        return [ "receipt_data": receipt]
     }
     
     func updateReceipt(onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
@@ -378,7 +393,7 @@ extension APIManager {
             return
         }
 
-        self.apiRequest(.put, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: { dict in
+        self.apiRequest(.post, URLString: urlString, parameters: params, encoding: URLEncoding.default, onSuccess: { dict in
             onSuccess()
         },onFailure: {error in
             onFailure(error)

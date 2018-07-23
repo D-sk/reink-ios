@@ -110,6 +110,7 @@ extension MyPageViewController: MyPageViewDelegate {
         DispatchQueue.main.async {
             let ac = AlertManager.shared.alertController(.logoutConfrimation, handler: {
                 APIManager.shared.logout(onSuccess: {
+                    resetAll()
                     UIApplication.shared.keyWindow?.rootViewController = InitialViewController.instantiate()
                 }, onFailure: { [weak self] err in
                     self?.presentAlertController(with: err)

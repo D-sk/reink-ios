@@ -87,14 +87,14 @@ extension Friend {
 // MARK: - API
 extension Friend {
     
-    class func list(onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void){
+    class func list(onSuccess:(()->Void)?, onFailure:((_ error:NSError)->Void)?) {
         let latest = RealmManager.shared.latestUpdatedFriend()
         
         APIManager.shared.friends(updatedAt:latest?.updatedAt, onSuccess: { objects in
             RealmManager.shared.saveFriends(with: objects)
-            onSuccess()
+            onSuccess?()
         }, onFailure: { err in
-            onFailure(err)
+            onFailure?(err)
         })
         
     }

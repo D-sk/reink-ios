@@ -35,7 +35,7 @@ class AbstractViewController: UIViewController {
     */
 
     func isModal()->Bool{
-        return self.navigationController?.viewControllers.first == self
+        return self.navigationController == nil
     }
 
     func presentInternalError() {

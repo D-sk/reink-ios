@@ -24,7 +24,7 @@ class InitialViewController: AbstractViewController {
             UserDefaultsManager.shared.isFirstOpen = false
         }
         
-        if KeychainManager.shared.uname.isEmpty {
+        if RealmManager.shared.user() == nil {
             self.performSegue(withIdentifier: "presentWelcome", sender: self)
         
         } else if KeychainManager.shared.authToken.isEmpty {

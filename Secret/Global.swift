@@ -9,6 +9,22 @@
 import Foundation
 import LocalAuthentication
 
+enum Annotation: String {
+    case notEmail = "NotEmail"
+    case notHankaku = "NotHankaku"
+    case requiredPassword = "RequiredPassword"
+    case requiredUname = "RequiredUname"
+    case shortPassowrd = "ShortPassword"
+    case shortUname = "ShortUname"
+    
+    func message() -> String {
+        let com = "Annotation"
+        let key = com + self.rawValue
+        return NSLocalizedString(key, comment: com)
+    }
+    
+    
+}
 func canUseFaceID() -> Bool {
     if #available(iOS 11.0, *) {
         let context = LAContext()

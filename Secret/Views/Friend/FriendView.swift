@@ -12,11 +12,11 @@ protocol FriendViewDelegate: class {
     func closeDidTap(messageCount:Int)
     func unlinkDidTap()
     func emailDidTap()
-    func messageWillCompose()
     func muteDidTap()
     func phoneDidTap()
     func receiveMessageDidTap(message:Message)
     func sendDidTap(message:String)
+    func subscribeDidTap()
 }
 
 class FriendView: AbstractView {
@@ -35,7 +35,8 @@ class FriendView: AbstractView {
     //Inbox
     @IBOutlet fileprivate weak var _inboxView: UIView!
     @IBOutlet fileprivate weak var _inboxTableView: UITableView!
-    @IBOutlet fileprivate weak var _noMessagesLabel: UILabel!
+    @IBOutlet fileprivate weak var _inboxStateLabel: UILabel!
+    @IBOutlet fileprivate weak var _subscribeButton: UIButton!
     //Outbox
     @IBOutlet fileprivate weak var _outboxView: UIView!
     @IBOutlet fileprivate weak var _outboxTableView: UITableView!
@@ -85,8 +86,6 @@ class FriendView: AbstractView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if _textView.isFirstResponder {
             _textView.resignFirstResponder()
-        } else {
-            self.delegate?.closeDidTap(messageCount: _inbox.count)
         }
     }
 
@@ -136,10 +135,31 @@ class FriendView: AbstractView {
         _muteButton.setTitleColor(color, for: .normal)
     }
     
+    private func showNoneMessageIfNeeded() {
+        _inboxStateLabel.isHidden = _inbox.count > 0
+        if _inbox.count == 0 {
+            _inboxStateLabel.text = NSLocalizedString("InboxStateMessageNone", comment: "InboxStateMessage")
+        }
+    }
+    
+    func showNotSubscribedMessage() {
+        _inboxStateLabel.isHidden = false
+        _subscribeButton.isHidden = false
+        _textView.isUserInteractionEnabled = false
+        _inboxStateLabel.text = NSLocalizedString("InboxStateMessageNotSubscribed", comment: "InboxStateMessage")
+    }
+    
+    func hideNotSubscribeMessage() {
+        _inboxStateLabel.isHidden = true
+        _subscribeButton.isHidden = true
+        _textView.isUserInteractionEnabled = true
+    }
+    
+
     func setInbox(with messages:Array<Message>) {
         _inbox = messages
         _inboxTableView.reloadData()
-        _noMessagesLabel.isHidden = _inbox.count > 0
+        self.showNoneMessageIfNeeded()
     }
     
     func removeMessage(message:Message){
@@ -147,7 +167,7 @@ class FriendView: AbstractView {
             _inbox.remove(at: row)
             _inboxTableView.deleteRows(at: [IndexPath(row:row,section:0)], with: .automatic)
         }
-        _noMessagesLabel.isHidden = _inbox.count > 0
+        self.showNoneMessageIfNeeded()
     }
     
     func addOutBox(with message:Message) {
@@ -218,6 +238,9 @@ class FriendView: AbstractView {
     @IBAction func emailButtonDidTap(_ sender: Any) {
         self.delegate?.emailDidTap()
     }
+    @IBAction func subscribeButtonDidTap(_ sender: Any) {
+        self.delegate?.subscribeDidTap()
+    }
 }
 
 extension FriendView: UITableViewDelegate {
@@ -258,9 +281,15 @@ extension FriendView: UITableViewDataSource {
 
 
 extension FriendView: UITextViewDelegate{
-    
+
     func textViewDidBeginEditing(_ textView: UITextView) {
-        delegate?.messageWillCompose()
+        _inboxTableView.isUserInteractionEnabled = false
+        _outboxTableView.isUserInteractionEnabled = false
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        _inboxTableView.isUserInteractionEnabled = true
+        _outboxTableView.isUserInteractionEnabled = true
     }
     
     func textViewDidChange(_ textView: UITextView) {

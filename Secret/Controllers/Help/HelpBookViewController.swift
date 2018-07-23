@@ -20,7 +20,7 @@ class HelpBookViewController: AbstractViewController {
 
         // Do any additional setup after loading the view.
         _helpBookView.delegate = self
-        _helpBookView.setButton(isModal: self.navigationController == nil)
+        _helpBookView.setButton(isModal: self.isModal())
     }
     
     override func viewDidLayoutSubviews() {

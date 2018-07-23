@@ -26,7 +26,13 @@ class FriendViewController: AbstractViewController {
         // Do any additional setup after loading the view.
         self.friendView.delegate = self
         self.friendView.setFriend(friend: friend)
-        self.messages()        
+        
+        if self.needsSubscribed() {
+            self.friendView.showNotSubscribedMessage()
+        } else {
+            self.messages()
+        }
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -62,26 +68,40 @@ class FriendViewController: AbstractViewController {
     
     
     func messages(){
+        self.friendView.hideNotSubscribeMessage()
         Message.list(with: self.friend, onSuccess: { [weak self] messages in
             self?.friendView.setInbox(with: messages)
+            
         }, onFailure: { [weak self] err in
             self?.presentAlertController(with: err)
         })
     }
 
-    func phoneCall(digits:String) {
+    fileprivate func phoneCall(digits:String) {
         if let url = URL(string: "tel://" + digits) {
             UIApplication.shared.open(url, options: [:], completionHandler:nil)
         }
     }
     
-    func openMailCompose(toValue:String){
+    fileprivate func openMailCompose(toValue:String){
         let vc = MFMailComposeViewController()
         vc.setToRecipients([toValue])
         vc.mailComposeDelegate = self
         self.present(vc, animated: true, completion: nil)
     }
 
+    fileprivate func needsSubscribed() -> Bool {
+        guard let me = RealmManager.shared.myAccount() else {
+            return false
+        }
+        return me.isSubscribed == false && StoreManager.shared.basicProduct() != nil
+    }
+    
+    fileprivate func showSubscriptionIfNeeded() {
+        if self.needsSubscribed() {
+            self.performSegue(withIdentifier: "showProductFromFriend", sender: self)
+        }
+    }
 }
 
 extension FriendViewController: FriendViewDelegate {
@@ -155,13 +175,8 @@ extension FriendViewController: FriendViewDelegate {
         })
     }
     
-    func messageWillCompose() {
-        guard let me = RealmManager.shared.myAccount() else {
-            return
-        }
-        if me.subscribed.isEmpty && StoreManager.shared.basicProduct() != nil {
-//            self.performSegue(withIdentifier: "showProductFromFriend", sender: self)
-        }
+    func subscribeDidTap() {
+        self.showSubscriptionIfNeeded()
     }
     
 }

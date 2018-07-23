@@ -10,6 +10,7 @@ import UIKit
 
 protocol ActivationViewDelegate: class {
     func authButtonDidTap(code:String)
+    func closeDidTap()
     
 }
 
@@ -17,6 +18,7 @@ class ActivationView: AbstractView {
 
     @IBOutlet weak var codeTextField: UITextField!
     @IBOutlet weak var authButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton!
     
     weak var delegate: ActivationViewDelegate?
     
@@ -42,6 +44,10 @@ class ActivationView: AbstractView {
             codeTextField.resignFirstResponder()
         }
     }
+    
+    func setCloseButton(isModal:Bool) {
+        self.closeButton.isHidden = !isModal
+    }
 
     func isValidCode() -> Bool{
         if let txt = codeTextField.text {
@@ -64,6 +70,10 @@ class ActivationView: AbstractView {
 
     @IBAction func authButtonDidTap(_ sender: Any) {
         delegate?.authButtonDidTap(code: codeTextField.text!)
+    }
+    
+    @IBAction func closeButtonDidTap(_ sender: Any) {
+        delegate?.closeDidTap()
     }
 }
 

@@ -26,6 +26,9 @@ enum AlertType : Int{
     case friendDeleteConfirmation = 104
     case logoutConfrimation = 105
     case restoreConfirmation = 106
+    case passwordChanged = 107
+    case emailChanged = 108
+    case withdrawConfirmation = 109
     
 
     func title() -> String{

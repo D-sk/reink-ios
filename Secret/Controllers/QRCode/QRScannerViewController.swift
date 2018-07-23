@@ -15,7 +15,7 @@ class QRScannerViewController: AbstractViewController {
     var session: AVCaptureSession?
     var videoPreviewLayer:AVCaptureVideoPreviewLayer?
     var qrCodeFrameView:UIView = UIView(frame: CGRect.zero)
-    
+    var _isCaptured:Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -75,6 +75,10 @@ extension QRScannerViewController: QRScannerViewDelegate{
 extension QRScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+
+        if _isCaptured {
+            return
+        }
         
         if metadataObjects == nil || metadataObjects.count == 0 {
             qrCodeFrameView.frame = CGRect.zero
@@ -83,17 +87,23 @@ extension QRScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
         
         if let metadataObj = metadataObjects.first as? AVMetadataMachineReadableCodeObject {
             if metadataObj.type == AVMetadataObjectTypeQRCode {
+                
                 let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
                 qrCodeFrameView.frame = barCodeObject!.bounds
+                if _isCaptured == false {
+                    _isCaptured = true
+                    Friend.create(with: metadataObj, onSuccess: { [weak self] in
 
-                Friend.create(with: metadataObj, onSuccess: { [weak self] in
-                
-                    self?.dismiss(animated: true, completion: nil)
-                
-                }, onFailure: { [weak self] err in
-                    self?.presentAlertController(with: err)
-                    
-                })
+                        self?.dismiss(animated: true, completion: nil)
+                        
+                        }, onFailure: { [weak self] err in
+                            
+                            self?.dismiss(animated: true, completion: {
+                                self?.presentAlertController(with: err)
+                            })
+                            
+                    })
+                }
             }
             
         }

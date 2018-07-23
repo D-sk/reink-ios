@@ -34,12 +34,14 @@ class ProductView: AbstractView {
     
     override func setup() {
         super.setup()
+        self.isHidden = true
     }
     
     func setProduct(with product:SKProduct) {
         _titleLabel.text = product.localizedTitle
         _priceLabel.text = product.priceString()
         _bodyLabel.text = product.localizedDescription
+        self.isHidden = false
     }
 
     @IBAction func buyButtonDidTap(_ sender: Any) {

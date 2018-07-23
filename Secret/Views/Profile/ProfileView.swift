@@ -14,17 +14,19 @@ protocol ProfileViewDelegate: class {
     func cancelButtonDidTap()
     func saveButtonDidTap(account:Account)
     func thumbnailDidTap()
+    func idDidTap()
 }
 
 class ProfileView: AbstractView {
 
     @IBOutlet weak var _tableView: UITableView!
     @IBOutlet weak var _thumbnail: UIImageView!
-    @IBOutlet weak var _idLabel: UILabel!
+    @IBOutlet weak var _idButton: UIButton!
     @IBOutlet weak var _nameField: TextField!
     @IBOutlet weak var _cancelButton: UIButton!
     @IBOutlet weak var _saveButton: UIButton!
     @IBOutlet weak var _thumbnailButton: UIButton!
+    
     
     weak var delegate: ProfileViewDelegate?
     fileprivate var _account:Account = Account()
@@ -57,21 +59,26 @@ class ProfileView: AbstractView {
     fileprivate func setThumbnail() {
         if let url = _account.imageURL() {
             _thumbnail.contentMode = .scaleAspectFill
-            
             _thumbnail.af_setImage(withURL: url)
         } else {
             _thumbnail.contentMode = .bottom
         }
     }
 
-    func setAccount(account:Account, isNew:Bool=false) {
-        _cancelButton.isHidden = (account.id == 0)
-        _account = account.copy() as! Account
-        _idLabel.text = _account.uname
+    func setUserAccount(with user:User) {
+        
+        _idButton.setTitle(user.uname, for: .normal)
+        if let acc = user.account {
+            _account = acc.copy() as! Account
+        } else {
+            _account = Account()
+        }
+        _cancelButton.isHidden = (_account.id == 0)
         _nameField.text = _account.name
         self.setThumbnail()
         self.enableSaveButton()
         _tableView.reloadData()
+        
     }
 
     func setProfileImage(image: UIImage){
@@ -125,6 +132,9 @@ class ProfileView: AbstractView {
         self.enableSaveButton()
     }
 
+    @IBAction func idButtonDidTap(_ sender: Any) {
+        self.delegate?.idDidTap()
+    }
 }
 
 extension ProfileView:UITableViewDataSource {

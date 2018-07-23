@@ -24,8 +24,8 @@ class QRCodeViewController: AbstractViewController {
 
         // Do any additional setup after loading the view.
         self.qrCodeView.delegate = self
-        if let a = RealmManager.shared.myAccount() {
-            self.qrCodeView.setQRCode(account: a)
+        if let data = RealmManager.shared.user()?.qrCodeData() {
+            self.qrCodeView.setQRCode(with: data)
         }
         
     }
@@ -33,6 +33,11 @@ class QRCodeViewController: AbstractViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        Friend.list(onSuccess: nil, onFailure: nil)
     }
     
 

@@ -55,16 +55,12 @@ extension RegistrationViewController: RegistrationViewDelegate {
     func registerDidTap(uname: String, pass: String) {
         if isLogin {
             
-            APIManager.shared.login(uname: uname, pass: pass, onSuccess: { [weak self] user, token in
+            APIManager.shared.login(uname: uname, pass: pass, onSuccess: { [weak self] userDict, token in
                 
-                KeychainManager.shared.uname = user["username"] as! String
-                KeychainManager.shared.uuid =  user["uuid"] as! String
+                let usr = User.object(from: userDict)
+                RealmManager.shared.saveUser(with: usr)
                 KeychainManager.shared.authToken = token
                 
-                if let dict = user["account"] as? Dictionary<String, Any> {
-                    let acc = Account.object(from: dict)
-                    RealmManager.shared.saveAccount(with: acc)
-                }
                 self?.parent?.dismiss(animated: true, completion: nil)
                 
             }, onFailure: { [weak self] err in
@@ -73,11 +69,13 @@ extension RegistrationViewController: RegistrationViewDelegate {
             
         } else {
             
-            APIManager.shared.register(uname: uname, pass: pass, onSuccess: { [weak self] uname, uuid in
+            APIManager.shared.register(uname: uname, pass: pass, onSuccess: { [weak self] dict in
                 
                 UserDefaultsManager.shared.isFirstLogin = true
-                KeychainManager.shared.uname = uname
-                KeychainManager.shared.uuid = uuid
+                
+                let usr = User.object(from: dict)
+                RealmManager.shared.saveUser(with: usr)
+                
                 self?.parent?.dismiss(animated: true, completion: nil)
                 
             }, onFailure: { [weak self] err in

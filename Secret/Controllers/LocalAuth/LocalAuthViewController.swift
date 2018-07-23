@@ -17,6 +17,7 @@ class LocalAuthViewController: AbstractViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.auth()
     }
 
     override func didReceiveMemoryWarning() {

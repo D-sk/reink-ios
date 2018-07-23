@@ -12,12 +12,11 @@ import RealmSwift
 class Account: Object, NSCopying {
 
     dynamic var id:Int = 0
-    dynamic var uname:String = ""
     dynamic var name:String = ""
     dynamic var imagePath:String?
     dynamic var phone:String = ""
     dynamic var email:String = ""
-    dynamic var subscribed:String = ""
+    dynamic var isSubscribed:Bool = false
 
     override static func primaryKey() -> String? {
         return "id"
@@ -26,14 +25,13 @@ class Account: Object, NSCopying {
     class func object(from:Dictionary<String,Any>) -> Account {
         let acc = Account()
         acc.id = from["id"] as! Int
-        acc.uname = from["user"] as! String
         acc.name = from["name"] as! String
         acc.phone = from["phone"] as! String
         acc.email = from["email"] as! String
         acc.imagePath = from["thumbnail"] as? String
         
-        if let subscribed = from["subscribed"] as? String {
-            acc.subscribed = subscribed
+        if let isSubscribed = from["is_subscribed"] as? Bool {
+            acc.isSubscribed = isSubscribed
         }
         
         return acc
@@ -42,7 +40,6 @@ class Account: Object, NSCopying {
     func copy(with zone: NSZone? = nil) -> Any {
         let acc = Account()
         acc.id = self.id
-        acc.uname = self.uname
         acc.name = self.name
         acc.imagePath = self.imagePath
         acc.phone = self.phone
@@ -64,21 +61,6 @@ class Account: Object, NSCopying {
         }
         return URL(string:path)
     }
-    
-    func qrCodeData() -> Data? {
-        var dict = [String:Any]()
-        dict["uname"] = self.uname
-        dict["uuid"] = KeychainManager.shared.uuid
-        
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: dict, options: []) //(*)options??
-            return jsonData
-        } catch {
-            print("Error!: \(error)")
-        }
-        return nil
-    }
-
 }
 
 // MARK: - API
@@ -95,7 +77,7 @@ extension Account {
     
     func create(with thumbnail:UIImage?, onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void) {
         APIManager.shared.createAccount(self, withThumbnail: thumbnail, onSuccess: { dict in
-            RealmManager.shared.saveAccount(with: self)
+            RealmManager.shared.saveUserAccount(with: Account.object(from: dict))
             onSuccess()
 
         }, onFailure: { err in
@@ -106,7 +88,7 @@ extension Account {
     
     func update(with thumbnail:UIImage?, onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void) {
         APIManager.shared.updateAccount(account: self, withThumbnail: thumbnail, onSuccess: { dict in
-            RealmManager.shared.saveAccount(with: self)
+            RealmManager.shared.saveAccount(with: Account.object(from: dict))
             onSuccess()
         }, onFailure: { err in
             onFailure(err)

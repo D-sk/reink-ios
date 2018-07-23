@@ -19,23 +19,24 @@ class ProfileViewController: AbstractViewController {
 
         // Do any additional setup after loading the view.
         self.profileView.delegate = self
-        if let a = RealmManager.shared.myAccount() {
-            self.profileView.setAccount(account:a)
+        if let usr = RealmManager.shared.user() {
+        
+            self.profileView.setUserAccount(with: usr)
+        
         } else {
-            let a = Account()
-            a.uname = KeychainManager.shared.uname
-            self.profileView.setAccount(account: a)
+            
+            let ac = AlertManager.shared.alertController(.authError, handler: nil, cancelHandler: nil)
+            self.present(ac, animated: true, completion: nil)
+            if self.isModal() {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
+            
         }
+        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -78,6 +79,7 @@ extension ProfileViewController: ProfileViewDelegate {
         } else {
             
             account.update(with: _newThumbnail, onSuccess: { [weak self] in
+                
                 _ = self?.navigationController?.popViewController(animated: true)
             
             }, onFailure: { [weak self] err in
@@ -118,4 +120,9 @@ extension ProfileViewController: ProfileViewDelegate {
             
         })
     }
+    
+    func idDidTap() {
+        self.performSegue(withIdentifier: "showAccount", sender: self)
+    }
+
 }

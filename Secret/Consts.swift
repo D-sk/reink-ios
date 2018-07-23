@@ -15,11 +15,11 @@ class Consts: NSObject {
     }
     
     class var termsURL: URL {
-        return URL(string: "https://www.facebook.com/")!
+        return URL(string: "https://api.reink.tokyo/terms/")!
     }
 
     class var privacyURL: URL {
-        return URL(string: "https://www.nike.com/jp/launch/")!
+        return URL(string: "https://api.reink.tokyo/privacy/")!
     }
     
 

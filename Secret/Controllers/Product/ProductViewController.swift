@@ -14,11 +14,6 @@ class ProductViewController: AbstractViewController {
     @IBOutlet weak var _productView: ProductView!
     let transition:OverlayTransition = OverlayTransition()
     var product:SKProduct?
-//    {
-//        didSet {
-//            _productView.setProduct(with: product!)
-//        }
-//    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -32,11 +27,6 @@ class ProductViewController: AbstractViewController {
         // Do any additional setup after loading the view.
         _productView.delegate = self
         StoreManager.shared.delegate = self
-        self.product = StoreManager.shared.basicProduct()
-        if self.product != nil {
-            _productView.setProduct(with: product!)
-        }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +48,6 @@ class ProductViewController: AbstractViewController {
         StoreManager.shared.delegate = nil
         
     }
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -89,9 +78,13 @@ extension ProductViewController: StoreManagerDelegate {
     }
     
     func transactionDidPurchase(_ transaction: SKPaymentTransaction, completed: @escaping () -> Void) {
-        APIManager.shared.updateReceipt(onSuccess: {
-            self.removeLoadingView()
+        self.removeLoadingView()
+        APIManager.shared.updateReceipt(onSuccess: { [weak self] in
+            if let vc = self?.presentingViewController as? FriendViewController {
+                vc.messages()
+            }
             completed()
+            self?.dismiss(animated: true, completion:nil)
         }, onFailure: { err in
             self.removeLoadingView()
             self.present(AlertManager.shared.alertController(err), animated: true, completion: nil)
@@ -101,6 +94,7 @@ extension ProductViewController: StoreManagerDelegate {
     
     func transactionDidFail(_ transaction: SKPaymentTransaction, error: Error) {
         let ac = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(ac, animated: true, completion: {
             self.removeLoadingView()
         })

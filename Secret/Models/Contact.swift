@@ -28,7 +28,6 @@ class Contact: Object, NSCopying {
     
     class func object(from:CNContact) -> Contact {
         let c = Contact()
-        debugPrint(from.identifier)
         c.identifier = from.identifier
         c.givenName = from.givenName
         c.familyName = from.familyName

@@ -55,6 +55,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 application.keyWindow?.rootViewController?.present(ac, animated: true, completion: nil)
             })
         }
+        
+        let token = "720b9413058c8b6c2c3047e357b90f226f5f3d2c56b1d6a66cbfd39c88270e13"
+        APIManager.shared.updateDeviceToken(token, onSuccess: {
+        }, onFailure: { err in
+            debugPrint("Failed to enable notification, error: \(err)")
+        })
+
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

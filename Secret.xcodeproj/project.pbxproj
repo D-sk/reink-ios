@@ -41,7 +41,13 @@
 		692C9B2720CC963B00F394C6 /* HelpListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 692C9B2620CC963B00F394C6 /* HelpListView.xib */; };
 		692C9B2920CC966300F394C6 /* HelpListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692C9B2820CC966300F394C6 /* HelpListViewController.swift */; };
 		692C9B3520CCDA6500F394C6 /* LocalAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692C9B3420CCDA6500F394C6 /* LocalAuthViewController.swift */; };
+		693194C220D4E3A0001234DD /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693194C120D4E3A0001234DD /* UserView.swift */; };
+		693194C520D4E41A001234DD /* UserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 693194C420D4E41A001234DD /* UserView.xib */; };
+		693194C820D4E48A001234DD /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693194C720D4E48A001234DD /* UserViewController.swift */; };
+		693194CB20D50189001234DD /* UserViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693194C920D50189001234DD /* UserViewCell.swift */; };
+		693194CC20D50189001234DD /* UserViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 693194CA20D50189001234DD /* UserViewCell.xib */; };
 		693450D5200B582A008B6251 /* Date+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693450D4200B582A008B6251 /* Date+Utils.swift */; };
+		6939883220DDEFD400BEF255 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6939883120DDEFD400BEF255 /* User.swift */; };
 		694454711F92414C002AD6BC /* UIStoryboard+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694454701F92414C002AD6BC /* UIStoryboard+Utils.swift */; };
 		694454731F9249BB002AD6BC /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694454721F9249BB002AD6BC /* Account.swift */; };
 		694454771F931F65002AD6BC /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694454761F931F65002AD6BC /* UserDefaultsManager.swift */; };
@@ -84,6 +90,9 @@
 		6998DA9D2000FBA400D8E981 /* AuthCodeRequestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6998DA9C2000FBA400D8E981 /* AuthCodeRequestView.xib */; };
 		6998DA9F20010BDF00D8E981 /* AuthCodeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6998DA9E20010BDF00D8E981 /* AuthCodeRequestViewController.swift */; };
 		69B9593E206251A3006DCDB8 /* GroupMemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B9593D206251A3006DCDB8 /* GroupMemberViewController.swift */; };
+		69B9978120D51F8800A9D35E /* UserEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B9978020D51F8800A9D35E /* UserEditView.swift */; };
+		69B9978320D51F9500A9D35E /* UserEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B9978220D51F9500A9D35E /* UserEditView.xib */; };
+		69B9978520D6525000A9D35E /* UserEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B9978420D6525000A9D35E /* UserEditViewController.swift */; };
 		69BDBDA720257A1A00A9633A /* SentMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BDBDA520257A1A00A9633A /* SentMessageCell.swift */; };
 		69BDBDA820257A1A00A9633A /* SentMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69BDBDA620257A1A00A9633A /* SentMessageCell.xib */; };
 		69C5B02520831BC900668A75 /* Products.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69C5B02420831BC900668A75 /* Products.plist */; };
@@ -198,7 +207,13 @@
 		692C9B2620CC963B00F394C6 /* HelpListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpListView.xib; sourceTree = "<group>"; };
 		692C9B2820CC966300F394C6 /* HelpListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpListViewController.swift; sourceTree = "<group>"; };
 		692C9B3420CCDA6500F394C6 /* LocalAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthViewController.swift; sourceTree = "<group>"; };
+		693194C120D4E3A0001234DD /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		693194C420D4E41A001234DD /* UserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserView.xib; sourceTree = "<group>"; };
+		693194C720D4E48A001234DD /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		693194C920D50189001234DD /* UserViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewCell.swift; sourceTree = "<group>"; };
+		693194CA20D50189001234DD /* UserViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserViewCell.xib; sourceTree = "<group>"; };
 		693450D4200B582A008B6251 /* Date+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Utils.swift"; sourceTree = "<group>"; };
+		6939883120DDEFD400BEF255 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		694454701F92414C002AD6BC /* UIStoryboard+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+Utils.swift"; sourceTree = "<group>"; };
 		694454721F9249BB002AD6BC /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		694454761F931F65002AD6BC /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
@@ -248,6 +263,9 @@
 		6998DA9E20010BDF00D8E981 /* AuthCodeRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCodeRequestViewController.swift; sourceTree = "<group>"; };
 		69B1C2A820801A9F000BCF41 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		69B9593D206251A3006DCDB8 /* GroupMemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMemberViewController.swift; sourceTree = "<group>"; };
+		69B9978020D51F8800A9D35E /* UserEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditView.swift; sourceTree = "<group>"; };
+		69B9978220D51F9500A9D35E /* UserEditView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserEditView.xib; sourceTree = "<group>"; };
+		69B9978420D6525000A9D35E /* UserEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditViewController.swift; sourceTree = "<group>"; };
 		69BDBDA520257A1A00A9633A /* SentMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMessageCell.swift; sourceTree = "<group>"; };
 		69BDBDA620257A1A00A9633A /* SentMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SentMessageCell.xib; sourceTree = "<group>"; };
 		69C5B02420831BC900668A75 /* Products.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Products.plist; sourceTree = "<group>"; };
@@ -459,6 +477,28 @@
 				692C9B3420CCDA6500F394C6 /* LocalAuthViewController.swift */,
 			);
 			path = LocalAuth;
+			sourceTree = "<group>";
+		};
+		693194C020D4E381001234DD /* User */ = {
+			isa = PBXGroup;
+			children = (
+				693194C120D4E3A0001234DD /* UserView.swift */,
+				693194C420D4E41A001234DD /* UserView.xib */,
+				693194C920D50189001234DD /* UserViewCell.swift */,
+				693194CA20D50189001234DD /* UserViewCell.xib */,
+				69B9978020D51F8800A9D35E /* UserEditView.swift */,
+				69B9978220D51F9500A9D35E /* UserEditView.xib */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		693194C620D4E479001234DD /* User */ = {
+			isa = PBXGroup;
+			children = (
+				693194C720D4E48A001234DD /* UserViewController.swift */,
+				69B9978420D6525000A9D35E /* UserEditViewController.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		6969C421205D57580040A26D /* ColorEdit */ = {
@@ -680,6 +720,7 @@
 		69EAD7A01F3EF27E00C9EFCB /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				693194C620D4E479001234DD /* User */,
 				69DBAC501FF9D750003ADB18 /* Activation */,
 				6969C42A205D608D0040A26D /* ColorEdit */,
 				69E7530A1F7263E8000DFD35 /* Contact */,
@@ -719,6 +760,7 @@
 				690D71421F56A6AF00050AB5 /* Profile */,
 				691A51A9202EC60800F7D549 /* QRCode */,
 				69E752F91F7256A0000DFD35 /* Registration */,
+				693194C020D4E381001234DD /* User */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -733,6 +775,7 @@
 				69F1854E1FF38AA5002BC8F2 /* Message.swift */,
 				69CFEA441F8E246C00945464 /* EmailAddress.swift */,
 				69F185501FF38FBD002BC8F2 /* PhoneNumber.swift */,
+				6939883120DDEFD400BEF255 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -740,15 +783,15 @@
 		69EAD7A31F3EF28F00C9EFCB /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				69F97A451F3FECB3006BA0B2 /* CNContactManager.swift */,
 				691F4CB21F4D537D00BD0F50 /* AlertManager.swift */,
 				69EE981C1FE63D6C00335A5E /* APIManager.swift */,
-				6998CE6C1F4D784E000D418E /* RealmManager.swift */,
+				69F97A451F3FECB3006BA0B2 /* CNContactManager.swift */,
 				69D550CE1F85127100ED07D8 /* KeychainManager.swift */,
-				694B1D3A1F8A5A9000362DE3 /* PLManager.swift */,
-				694454761F931F65002AD6BC /* UserDefaultsManager.swift */,
 				69C5B032208375B300668A75 /* PaymentManager.swift */,
+				694B1D3A1F8A5A9000362DE3 /* PLManager.swift */,
+				6998CE6C1F4D784E000D418E /* RealmManager.swift */,
 				696F6AA2207870730024211B /* StoreManager.swift */,
+				694454761F931F65002AD6BC /* UserDefaultsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -950,6 +993,7 @@
 				69E46131205364E50094B7DB /* HistoryView.xib in Resources */,
 				6996AAA31F3EF00D0072E068 /* Assets.xcassets in Resources */,
 				691A51B2202ECE8400F7D549 /* MyPageViewSettingsCell.xib in Resources */,
+				693194CC20D50189001234DD /* UserViewCell.xib in Resources */,
 				69E656D02034287100956555 /* Localizable.strings in Resources */,
 				691A51B9202ED9AD00F7D549 /* MyPageViewCell.xib in Resources */,
 				695D942E204142DF007BA1EB /* QRScannerView.xib in Resources */,
@@ -959,8 +1003,10 @@
 				69CB0C5820303D9B00BC7D89 /* HelpPageView.xib in Resources */,
 				692C9B2720CC963B00F394C6 /* HelpListView.xib in Resources */,
 				690495D51FAED8F200B5207E /* FriendMessageCell.xib in Resources */,
+				693194C520D4E41A001234DD /* UserView.xib in Resources */,
 				69E46135205364FB0094B7DB /* HistoryViewCell.xib in Resources */,
 				6998DA9D2000FBA400D8E981 /* AuthCodeRequestView.xib in Resources */,
+				69B9978320D51F9500A9D35E /* UserEditView.xib in Resources */,
 				69EAD7BB1F3EF3B500C9EFCB /* ContactListViewCell.xib in Resources */,
 				690495DC1FAF039E00B5207E /* MessageView.xib in Resources */,
 				6969C41E205D12270040A26D /* GroupAddCell.xib in Resources */,
@@ -1147,6 +1193,9 @@
 				69EE981D1FE63D6C00335A5E /* APIManager.swift in Sources */,
 				692A2ACA1F77EEE3007E31B2 /* ProfileView.swift in Sources */,
 				69DBAC4D1FF9D027003ADB18 /* ActivationView.swift in Sources */,
+				6939883220DDEFD400BEF255 /* User.swift in Sources */,
+				693194C820D4E48A001234DD /* UserViewController.swift in Sources */,
+				69B9978520D6525000A9D35E /* UserEditViewController.swift in Sources */,
 				69F97A461F3FECB3006BA0B2 /* CNContactManager.swift in Sources */,
 				69E753101F72643A000DFD35 /* ProfileViewController.swift in Sources */,
 				690D71441F56A6E600050AB5 /* QRCodeView.swift in Sources */,
@@ -1156,6 +1205,7 @@
 				69CB0C65203063AF00BC7D89 /* HelpPage.swift in Sources */,
 				69EAD7B21F3EF37200C9EFCB /* ContactView.swift in Sources */,
 				695E59A6208B555700B02919 /* LoadingView.swift in Sources */,
+				69B9978120D51F8800A9D35E /* UserEditView.swift in Sources */,
 				69B9593E206251A3006DCDB8 /* GroupMemberViewController.swift in Sources */,
 				69F185511FF38FBE002BC8F2 /* PhoneNumber.swift in Sources */,
 				6996AA9E1F3EF00D0072E068 /* ViewController.swift in Sources */,
@@ -1183,6 +1233,7 @@
 				695D942620412099007BA1EB /* TextField.swift in Sources */,
 				691A51BE202F1CE100F7D549 /* EmptySegue.swift in Sources */,
 				6969C423205D57730040A26D /* ColorEditView.swift in Sources */,
+				693194CB20D50189001234DD /* UserViewCell.swift in Sources */,
 				696F6AA3207870730024211B /* StoreManager.swift in Sources */,
 				690D71411F56A41200050AB5 /* CALayer+Utils.swift in Sources */,
 				69C8F4D2201C634B001DBA92 /* DateFromatter+Utils.swift in Sources */,
@@ -1192,6 +1243,7 @@
 				6998CE711F4DC20D000D418E /* String+Utils.swift in Sources */,
 				69CFEA411F8E22D700945464 /* Friend.swift in Sources */,
 				69E752F81F72566C000DFD35 /* InitialViewController.swift in Sources */,
+				693194C220D4E3A0001234DD /* UserView.swift in Sources */,
 				69C5B033208375B300668A75 /* PaymentManager.swift in Sources */,
 				6969C42C205D60A90040A26D /* ColorEditViewController.swift in Sources */,
 				691F5B6E204BD76500579F86 /* GroupFlipViewController.swift in Sources */,

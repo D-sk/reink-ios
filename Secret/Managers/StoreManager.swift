@@ -110,7 +110,7 @@ class StoreManager: NSObject {
         }
         
         let payment = SKMutablePayment(product: product)
-        payment.applicationUsername = KeychainManager.shared.uuid.sha256()
+        payment.applicationUsername = RealmManager.shared.user()!.uuid.sha256()
         SKPaymentQueue.default().add(payment)
     }
     
@@ -151,9 +151,8 @@ extension StoreManager: SKProductsRequestDelegate {
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
 
-        for id in response.invalidProductIdentifiers {
-            debugPrint(id)
-        }
+//        for id in response.invalidProductIdentifiers {
+//        }
         self.products = response.products
         if let vc = (UIApplication.shared.keyWindow?.rootViewController?.presentedViewController as? ProductViewController) {
             vc.product = self.basicProduct()

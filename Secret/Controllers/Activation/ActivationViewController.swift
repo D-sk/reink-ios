@@ -17,12 +17,14 @@ class ActivationViewController: AbstractViewController {
 
         // Do any additional setup after loading the view.
         self.activationView.delegate = self
+        self.activationView.setCloseButton(isModal: self.isModal())
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
 
     /*
@@ -39,14 +41,21 @@ class ActivationViewController: AbstractViewController {
 
 extension ActivationViewController: ActivationViewDelegate {
     func authButtonDidTap(code: String) {
-        APIManager.shared.activate(code: code, onSuccess: { [weak self] authToken in
+        
+        APIManager.shared.activate(code: code, onSuccess: { [weak self] email, authToken in
             
+            RealmManager.shared.updateUserEmail(with: email)
             KeychainManager.shared.authToken = authToken
+            
             self?.dismiss(animated: true, completion: nil)
         
         }, onFailure: { [weak self] err in
             self?.presentAlertController(with: err)
             
         })
+    }
+    
+    func closeDidTap() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

@@ -67,6 +67,7 @@ class ContactListView: AbstractView {
         tableView.sectionIndexColor = UIColor.Palette.black.color()
         tableView.sectionIndexBackgroundColor = UIColor.clear
         tableView.tableFooterView = UIView(frame:CGRect.zero)
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
     }
     
     
@@ -200,7 +201,7 @@ extension ContactListView: UITableViewDataSource {
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         
-        if self.isEdit || self.isEmpty() {
+        if self.isEmpty() {
             return nil
         }
         return _sections
@@ -225,7 +226,7 @@ extension ContactListView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueCell(type: ContactListViewHeaderCell.self)
-        if section == 0 {
+        if section == 0 && _friends.count > 0 {
             cell.titleLabel.text = NSLocalizedString("HeaderTitleFriend", comment: "HeaderTitle")
             cell.effectView.backgroundColor = self.color
         } else {
@@ -290,11 +291,5 @@ extension ContactListView: UITableViewDelegate {
             }
         }
     }
-    
 }
 
-
-extension ContactListView {
-    
-
-}

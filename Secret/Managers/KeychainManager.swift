@@ -18,37 +18,53 @@ class KeychainManager: NSObject {
         _keychain.accessibilityState = .attrAccessibleAlways
     }
     
-    public var uname:String {
-        get {
-            if let value = _keychain.object(forKey: "uname") as? String{
-                return  value
-            }
-            return ""
-        }
-        set {
-            if newValue.isEmpty {
-                _keychain.setObject(nil, forKey: "uname")
-            } else {
-                _keychain.setObject(newValue, forKey: "uname")
-            }
-        }
-    }
-    
-    public var uuid:String{
-        get {
-            if let value = _keychain.object(forKey: "uuid") as? String{
-                return  value
-            }
-            return ""
-        }
-        set {
-            if newValue.isEmpty {
-                _keychain.setObject(nil, forKey: "uuid")
-            } else {
-                _keychain.setObject(newValue, forKey: "uuid")
-            }
-        }
-    }
+//    public var uname:String {
+//        get {
+//            if let value = _keychain.object(forKey: "uname") as? String{
+//                return  value
+//            }
+//            return ""
+//        }
+//        set {
+//            if newValue.isEmpty {
+//                _keychain.setObject(nil, forKey: "uname")
+//            } else {
+//                _keychain.setObject(newValue, forKey: "uname")
+//            }
+//        }
+//    }
+//
+//    public var email:String {
+//        get {
+//            if let value = _keychain.object(forKey: "email") as? String{
+//                return  value
+//            }
+//            return ""
+//        }
+//        set {
+//            if newValue.isEmpty {
+//                _keychain.setObject(nil, forKey: "email")
+//            } else {
+//                _keychain.setObject(newValue, forKey: "email")
+//            }
+//        }
+//    }
+//
+//    public var uuid:String{
+//        get {
+//            if let value = _keychain.object(forKey: "uuid") as? String{
+//                return  value
+//            }
+//            return ""
+//        }
+//        set {
+//            if newValue.isEmpty {
+//                _keychain.setObject(nil, forKey: "uuid")
+//            } else {
+//                _keychain.setObject(newValue, forKey: "uuid")
+//            }
+//        }
+//    }
     
     public var authToken:String {
         get {
@@ -79,9 +95,7 @@ class KeychainManager: NSObject {
     }
     
     func clear() {
-        self.uname = ""
         self.authToken = ""
-        self.uuid = ""
         self.receiptStatus = nil
     }
 

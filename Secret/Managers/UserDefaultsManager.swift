@@ -59,7 +59,7 @@ class UserDefaultsManager: NSObject {
             if let value = _userdefaults.object(forKey: "passcode") as? Bool{
                 return  value
             }
-            return true
+            return false
         }
         set {
             _userdefaults.set(newValue, forKey: "passcode")

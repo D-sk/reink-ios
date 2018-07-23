@@ -25,6 +25,7 @@ class GroupEditView: AbstractView {
     fileprivate var _group:Group! {
         didSet {
             _textField.text = _group.name
+            _textField.delegate = self
             _colorButton.backgroundColor = _group.color()
             _contatListView.setFriends(with: Array(_group.friends))
             _contatListView.setContacts(with: Array(_group.contacts))
@@ -43,6 +44,12 @@ class GroupEditView: AbstractView {
     override func setup() {
         super.setup()
         _contatListView.tableView.contentInset.bottom = _editButton.frame.height
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if _textField.isFirstResponder {
+            _textField.resignFirstResponder()
+        }
     }
     
     func setGroup(with group:Group) {
@@ -79,5 +86,20 @@ class GroupEditView: AbstractView {
     
     @IBAction func colorDidTap(_ sender: Any) {
         delegate?.colorChangeDidTap()
+    }
+}
+
+extension GroupEditView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        _contatListView.isUserInteractionEnabled = false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        _contatListView.isUserInteractionEnabled = true
     }
 }

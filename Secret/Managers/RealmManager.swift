@@ -108,6 +108,37 @@ class RealmManager: NSObject {
         }
     }
     
+    
+    // User
+    func saveUser(with user: User){
+        try! _realm.write {
+            _realm.add(user, update: true)
+        }
+    }
+    
+    func user() -> User? {
+        return _realm.objects(User.self).first
+    }
+    
+    func updateUserEmail(with email:String) {
+        guard let usr = self.user() else {
+            return
+        }
+        try! _realm.write {
+            usr.email = email
+        }
+    }
+    
+    
+    func saveUserAccount(with account: Account) {
+        guard let usr = self.user() else {
+            return
+        }
+        try! _realm.write {
+            usr.account = account
+        }
+    }
+    
     // Account
     func saveAccount(with account: Account){
         try! _realm.write {
@@ -116,7 +147,7 @@ class RealmManager: NSObject {
     }
     
     func myAccount() -> Account? {
-        return _realm.objects(Account.self).filter("uname=%@", KeychainManager.shared.uname).first
+        return self.user()?.account
     }
 
     func account(with id:Int) -> Account? {
@@ -158,7 +189,7 @@ class RealmManager: NSObject {
     }
 
     func friends(with word:String) -> Results<Friend> {
-        let accounts = _realm.objects(Account.self).filter("uname CONTAINS[c] %@ OR name CONTAINS[c] %@", word, word)
+        let accounts = _realm.objects(Account.self).filter("name CONTAINS[c] %@ OR name CONTAINS[c] %@", word, word)
         return _realm.objects(Friend.self).filter("account IN %@", accounts)
     }
 

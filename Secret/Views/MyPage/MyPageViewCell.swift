@@ -16,6 +16,8 @@ class MyPageViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        _thumbnail.layer.masksToBounds = true
+        _thumbnail.layer.cornerRadius = _thumbnail.frame.height/2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

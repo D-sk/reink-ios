@@ -68,6 +68,7 @@ class ProfileView: AbstractView {
     func setUserAccount(with user:User) {
         
         _idButton.setTitle(user.uname, for: .normal)
+        
         if let acc = user.account {
             _account = acc.copy() as! Account
         } else {
@@ -82,6 +83,7 @@ class ProfileView: AbstractView {
     }
 
     func setProfileImage(image: UIImage){
+        _thumbnail.contentMode = .scaleAspectFill
         _thumbnail.image = image        
     }
     

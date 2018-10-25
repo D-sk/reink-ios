@@ -47,7 +47,9 @@ enum AlertType : Int{
         switch self{
         case .contactConfirmation,
              .friendDeleteConfirmation,
-             .logoutConfrimation:            
+             .logoutConfrimation,
+             .restoreConfirmation,
+             .withdrawConfirmation:  
             return true
         default:
             return false
@@ -105,8 +107,10 @@ class AlertManager: NSObject {
         
         if type == .authError {
             return self.alertController(.authError, handler: {
-                resetAll()
-                UIApplication.shared.keyWindow?.rootViewController = InitialViewController.instantiate()
+                if !(UIApplication.topViewController() is RegistrationViewController) {
+                    resetAll()
+                    UIApplication.shared.keyWindow?.rootViewController = InitialViewController.instantiate()
+                }
             }, cancelHandler: nil)
         
         }

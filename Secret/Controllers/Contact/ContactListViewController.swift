@@ -21,7 +21,7 @@ class ContactListViewController: AbstractViewController {
                 self.contactListView.color = nil
                 return
             }
-            self.friends = Array(group.friends)
+            self.friends = Array(group.friends.sorted(byKeyPath: "receivedAt", ascending: false))
             self.contacts = Array(group.contacts)
             self.contactListView.color = UIColor.Palette(rawValue: group.colorKey+10)?.color()            
         }

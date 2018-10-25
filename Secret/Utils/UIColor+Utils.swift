@@ -81,7 +81,7 @@ extension UIColor {
             case .black: return UIColor(hex: "#333333")
             case .red: return UIColor(hex: "#E22040")
             case .pink: return UIColor(hex: "#FF80A8")
-            case .yellow: return UIColor(hex: "#FFE840")
+            case .yellow: return UIColor(hex: "#F8C840")
             case .green: return UIColor(hex: "#00A4A4")
             case .blue: return UIColor(hex: "#0080FF")
             case .navy: return UIColor(hex: "#101054")

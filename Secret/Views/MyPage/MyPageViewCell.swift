@@ -35,8 +35,10 @@ class MyPageViewCell: UITableViewCell {
     func configure(account: Account) {
         _titleLabel.text = account.name
         if let url = account.imageURL() {
-            _thumbnail.af_setImage(withURL: url)
             _thumbnail.contentMode = .scaleAspectFill
+            _thumbnail.af_setImage(withURL: url)
+        } else {
+            _thumbnail.image = UIImage(named: "ProfileThumbnail")
         }
     }
 }

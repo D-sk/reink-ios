@@ -102,6 +102,10 @@ class GroupFlipViewController: FlipViewController {
         }
 
         NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.self.syncContacts),
+                                               name: .UIApplicationDidBecomeActive,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.appWillEnterForeground),
                                                name: .UIApplicationWillEnterForeground,
                                                object: nil)
@@ -110,8 +114,8 @@ class GroupFlipViewController: FlipViewController {
                                                name: .UIApplicationDidEnterBackground,
                                                object: nil)
         
+        self.appWillEnterForeground()
         self.syncContacts()
-        self.localAuthIfNeeded()
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,32 +123,33 @@ class GroupFlipViewController: FlipViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        guard let me = RealmManager.shared.myAccount() else {
+            resetAll()
+            UIApplication.shared.keyWindow?.rootViewController = InitialViewController.instantiate()
+            return
+        }
+        
         if UserDefaultsManager.shared.isFirstLogin {
+            
             let vc = HelpListViewController.instantiate()
             self.present(vc, animated: true, completion:{
                 UserDefaultsManager.shared.isFirstLogin = false
             })
 
-        } else if UserDefaultsManager.shared.restored == false {
-            
-            guard let me = RealmManager.shared.myAccount() else {
-                resetAll()
-                UIApplication.shared.keyWindow?.rootViewController = InitialViewController.instantiate()
-                return
-            }
+        } else if me.needsRestore() {
 
-            if me.subscribed.isEmpty == false {
-                self.present(AlertManager.shared.alertController(.restoreConfirmation, handler: {
-                    self.addLoadingView(self.view.frame)
-                    StoreManager.shared.restoreDelegate = self
-                    StoreManager.shared.restore()
-                }, cancelHandler: nil), animated: true, completion: nil)
-            }
+            self.present(AlertManager.shared.alertController(.restoreConfirmation, handler: {
+                self.addLoadingView(self.view.bounds)
+                StoreManager.shared.restoreDelegate = self
+                StoreManager.shared.restore()
+            }, cancelHandler: nil), animated: true, completion: nil)
+
+            
         }
+
     }
     
     
@@ -187,9 +192,8 @@ class GroupFlipViewController: FlipViewController {
     }
 
     @objc private func appWillEnterForeground() {
-        self.registerNotification()
+        UserNotificationManager.shared.registerNotification()
         self.localAuthIfNeeded()
-        self.syncContacts()
     }
     
     @objc private func appDidEnterBackground(){
@@ -305,19 +309,6 @@ class GroupFlipViewController: FlipViewController {
         }
     }
 
-    func registerNotification() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { granted, error in
-            guard error == nil else {
-                return
-            }
-            if granted {
-                DispatchQueue.main.async(execute: {
-                    UIApplication.shared.registerForRemoteNotifications()
-                })
-            }
-        }
-    }
-    
     func syncContacts(){
         Friend.list(onSuccess:nil, onFailure:{ [weak self] err in
             self?.presentAlertController(with: err)
@@ -559,7 +550,6 @@ extension GroupFlipViewController {
 
 extension GroupFlipViewController: StoreManagerRestoreDelegate {
     func onSuccess() {
-        UserDefaultsManager.shared.restored = true
         self.removeLoadingView()
         StoreManager.shared.restoreDelegate = nil
     }

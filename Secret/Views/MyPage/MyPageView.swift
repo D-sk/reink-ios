@@ -101,7 +101,10 @@ class MyPageView: AbstractView {
         super.setup()
         _tableView.delegate = self
         _tableView.dataSource = self
-        _tableView.registerCells(types: [MyPageViewCell.self, MyPageViewSettingsCell.self])
+        _tableView.registerCells(types: [
+            MyPageViewCell.self as UITableViewCell.Type,
+            MyPageViewSettingsCell.self as UITableViewCell.Type
+            ])
     }
     
     func setAccount(_ acc:Account?) {
@@ -192,7 +195,7 @@ extension MyPageView: UITableViewDataSource {
             case 1:
                 cell.configure(title: NSLocalizedString("QRCodeTitle", comment: "QRCode"))
             case 2:
-                let title = NSLocalizedString("SubscribedPlan", comment: "SubscribedPlan") + StoreManager.shared.productName(by: _account!.subscribed)
+                let title = NSLocalizedString("SubscribedPlan", comment: "SubscribedPlan") //+ StoreManager.shared.productName(by: _account!.isSubscribed)
                 cell.configure(title: title)
             default:
                 break

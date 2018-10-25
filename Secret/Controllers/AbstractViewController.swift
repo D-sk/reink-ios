@@ -54,7 +54,11 @@ class AbstractViewController: UIViewController {
         }
         
         if self.loadingView.isAnimating == false {
-            self.view.addSubview(self.loadingView)
+            if let nvc = self.navigationController, frame == UIScreen.main.bounds {
+                nvc.view.addSubview(self.loadingView)
+            } else {
+                self.view.addSubview(self.loadingView)
+            }
             self.loadingView.startAnimating()
         }
         

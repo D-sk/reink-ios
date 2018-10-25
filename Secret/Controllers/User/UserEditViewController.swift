@@ -11,7 +11,7 @@ import UIKit
 class UserEditViewController: AbstractViewController {
 
     @IBOutlet weak var userEditView: UserEditView!
-    var editType:UserEditView.EditType!
+    var editType:UserEditView.EditType = .email
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,10 +69,7 @@ extension UserEditViewController: UserEditViewDelegate {
                 
             }, onFailure: { error in
                 self.presentAlertController(with: error)
-            })
-        
-        default:
-            break
+            })        
         }
     }
     

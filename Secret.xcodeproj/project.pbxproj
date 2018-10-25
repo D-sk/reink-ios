@@ -89,6 +89,8 @@
 		6998DA9B2000FB9600D8E981 /* AuthCodeRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6998DA9A2000FB9600D8E981 /* AuthCodeRequestView.swift */; };
 		6998DA9D2000FBA400D8E981 /* AuthCodeRequestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6998DA9C2000FBA400D8E981 /* AuthCodeRequestView.xib */; };
 		6998DA9F20010BDF00D8E981 /* AuthCodeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6998DA9E20010BDF00D8E981 /* AuthCodeRequestViewController.swift */; };
+		69AFB7A5210D947B00FF1D14 /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFB7A4210D947B00FF1D14 /* UserNotificationManager.swift */; };
+		69AFB7A7210D95A100FF1D14 /* UIApplicatoin+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AFB7A6210D95A100FF1D14 /* UIApplicatoin+Utils.swift */; };
 		69B9593E206251A3006DCDB8 /* GroupMemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B9593D206251A3006DCDB8 /* GroupMemberViewController.swift */; };
 		69B9978120D51F8800A9D35E /* UserEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B9978020D51F8800A9D35E /* UserEditView.swift */; };
 		69B9978320D51F9500A9D35E /* UserEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B9978220D51F9500A9D35E /* UserEditView.xib */; };
@@ -261,6 +263,8 @@
 		6998DA9A2000FB9600D8E981 /* AuthCodeRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCodeRequestView.swift; sourceTree = "<group>"; };
 		6998DA9C2000FBA400D8E981 /* AuthCodeRequestView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AuthCodeRequestView.xib; sourceTree = "<group>"; };
 		6998DA9E20010BDF00D8E981 /* AuthCodeRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCodeRequestViewController.swift; sourceTree = "<group>"; };
+		69AFB7A4210D947B00FF1D14 /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
+		69AFB7A6210D95A100FF1D14 /* UIApplicatoin+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplicatoin+Utils.swift"; sourceTree = "<group>"; };
 		69B1C2A820801A9F000BCF41 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		69B9593D206251A3006DCDB8 /* GroupMemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMemberViewController.swift; sourceTree = "<group>"; };
 		69B9978020D51F8800A9D35E /* UserEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditView.swift; sourceTree = "<group>"; };
@@ -533,6 +537,7 @@
 				691F4CB41F4D5A9F00BD0F50 /* UIView+Utils.swift */,
 				69C8F4D1201C634B001DBA92 /* DateFromatter+Utils.swift */,
 				69FBA7752026AF5B00DC524B /* UIImage+Utils.swift */,
+				69AFB7A6210D95A100FF1D14 /* UIApplicatoin+Utils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -792,6 +797,7 @@
 				6998CE6C1F4D784E000D418E /* RealmManager.swift */,
 				696F6AA2207870730024211B /* StoreManager.swift */,
 				694454761F931F65002AD6BC /* UserDefaultsManager.swift */,
+				69AFB7A4210D947B00FF1D14 /* UserNotificationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -927,9 +933,9 @@
 				TargetAttributes = {
 					6996AA971F3EF00D0072E068 = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = 2WPQS692DU;
+						DevelopmentTeam = D67M8AK3D8;
 						LastSwiftMigration = 0930;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -1235,6 +1241,7 @@
 				6969C423205D57730040A26D /* ColorEditView.swift in Sources */,
 				693194CB20D50189001234DD /* UserViewCell.swift in Sources */,
 				696F6AA3207870730024211B /* StoreManager.swift in Sources */,
+				69AFB7A5210D947B00FF1D14 /* UserNotificationManager.swift in Sources */,
 				690D71411F56A41200050AB5 /* CALayer+Utils.swift in Sources */,
 				69C8F4D2201C634B001DBA92 /* DateFromatter+Utils.swift in Sources */,
 				69E656D220342BD400956555 /* Global.swift in Sources */,
@@ -1242,6 +1249,7 @@
 				69DBAC521FF9D76D003ADB18 /* ActivationViewController.swift in Sources */,
 				6998CE711F4DC20D000D418E /* String+Utils.swift in Sources */,
 				69CFEA411F8E22D700945464 /* Friend.swift in Sources */,
+				69AFB7A7210D95A100FF1D14 /* UIApplicatoin+Utils.swift in Sources */,
 				69E752F81F72566C000DFD35 /* InitialViewController.swift in Sources */,
 				693194C220D4E3A0001234DD /* UserView.swift in Sources */,
 				69C5B033208375B300668A75 /* PaymentManager.swift in Sources */,
@@ -1424,11 +1432,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Secret/Secret.entitlements;
-				DEVELOPMENT_TEAM = 2WPQS692DU;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = D67M8AK3D8;
 				INFOPLIST_FILE = Secret/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.fiole.renk;
+				PRODUCT_BUNDLE_IDENTIFIER = tokyo.reink.msgapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9be15d3b-02d0-4d01-9cb2-34bd47de6324";
+				PROVISIONING_PROFILE_SPECIFIER = Development;
 				SWIFT_OBJC_BRIDGING_HEADER = "Secret/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1440,11 +1451,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Secret/Secret.entitlements;
-				DEVELOPMENT_TEAM = 2WPQS692DU;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = D67M8AK3D8;
 				INFOPLIST_FILE = Secret/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.fiole.renk;
+				PRODUCT_BUNDLE_IDENTIFIER = tokyo.reink.msgapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "f42e6696-0e3c-47bb-9c26-b7ade6ac1b62";
+				PROVISIONING_PROFILE_SPECIFIER = Production;
 				SWIFT_OBJC_BRIDGING_HEADER = "Secret/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

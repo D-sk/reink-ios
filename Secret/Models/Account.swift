@@ -11,12 +11,18 @@ import RealmSwift
 
 class Account: Object, NSCopying {
 
+    enum Membership: Int {
+        case special = 1
+        case basic = 2
+        case none = 0
+    }
+    
     dynamic var id:Int = 0
     dynamic var name:String = ""
     dynamic var imagePath:String?
     dynamic var phone:String = ""
     dynamic var email:String = ""
-    dynamic var isSubscribed:Bool = false
+    dynamic var membership:Int = 0
 
     override static func primaryKey() -> String? {
         return "id"
@@ -30,8 +36,8 @@ class Account: Object, NSCopying {
         acc.email = from["email"] as! String
         acc.imagePath = from["thumbnail"] as? String
         
-        if let isSubscribed = from["is_subscribed"] as? Bool {
-            acc.isSubscribed = isSubscribed
+        if let membership = from["membership"] as? Int {
+            acc.membership = membership
         }
         
         return acc
@@ -61,10 +67,21 @@ class Account: Object, NSCopying {
         }
         return URL(string:path)
     }
+    
+    func needsRestore() -> Bool{
+        return UserDefaultsManager.shared.restored == false && self.membership == 2
+    }
+
 }
 
 // MARK: - API
 extension Account {
+    
+    static func syncMyAccount() {
+        if let me = RealmManager.shared.myAccount() {
+            me.get(onSuccess: {}, onFailure: { err in })
+        }
+    }
     
     func get(onSuccess:@escaping()->Void, onFailure:@escaping(_ error:NSError)->Void) {
         APIManager.shared.account(with: self.id, onSuccess: { dict in

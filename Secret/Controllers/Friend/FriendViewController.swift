@@ -94,7 +94,7 @@ class FriendViewController: AbstractViewController {
         guard let me = RealmManager.shared.myAccount() else {
             return false
         }
-        return me.isSubscribed == false && StoreManager.shared.basicProduct() != nil
+        return me.membership == 0 && StoreManager.shared.basicProduct() != nil
     }
     
     fileprivate func showSubscriptionIfNeeded() {

@@ -47,8 +47,8 @@ class StoreManager: NSObject {
     private var _request: SKProductsRequest!
     dynamic var products = [SKProduct]()
     
-    static let PRODUCT_ID = "co.fiole.renk.basic"
-    static let SECRET = "4b4a533bd1c24ba592beaa1ee1239fc6"
+    static let PRODUCT_ID = "tokyo.reink.msgapp.basic"
+    static let SECRET = "afbc22d79a0144f891dcb1f9815d50fa"
     
     var receiptString:String? {
         guard let url = Bundle.main.appStoreReceiptURL, let receipt = NSData(contentsOf: url) else {
@@ -150,9 +150,6 @@ extension StoreManager: SKRequestDelegate {
 extension StoreManager: SKProductsRequestDelegate {
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-
-//        for id in response.invalidProductIdentifiers {
-//        }
         self.products = response.products
         if let vc = (UIApplication.shared.keyWindow?.rootViewController?.presentedViewController as? ProductViewController) {
             vc.product = self.basicProduct()
@@ -181,81 +178,39 @@ extension StoreManager: SKPaymentTransactionObserver {
             
             case .purchased:
                 
-                self.delegate?.transactionDidPurchase(t, completed: {
-                    SKPaymentQueue.default().finishTransaction(t)
-                })
                 
+                if let delegate = self.delegate {
+                    delegate.transactionDidPurchase(t, completed: {
+                        UserDefaultsManager.shared.restored = true
+                        SKPaymentQueue.default().finishTransaction(t)
+                    })
+                } else {
+                    UserDefaultsManager.shared.restored = true
+                    SKPaymentQueue.default().finishTransaction(t)
+                }
             
             case .restored:
                 
-                self.delegate?.transactionDidRestore(t, completed: {
+                if let delegate = self.delegate {
+                    delegate.transactionDidRestore(t, completed: {
+                        UserDefaultsManager.shared.restored = true
+                        SKPaymentQueue.default().finishTransaction(t)
+                    })
+                } else {
+                    UserDefaultsManager.shared.restored = true
                     SKPaymentQueue.default().finishTransaction(t)
-                })
+                }
             }
         }
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+        UserDefaultsManager.shared.restored = true
         self.restoreDelegate?.onSuccess()
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         self.restoreDelegate?.onFailed(error: error as NSError)
     }
-    
 }
 
-//extension StoreManager {
-//    func verifyRecipt() {
-//
-//        guard let url = Bundle.main.appStoreReceiptURL, let receipt = NSData(contentsOf: url) else {
-//            return
-//        }
-//
-//        #if DEBUG
-//        let urlString = "https://sandbox.itunes.apple.com/verifyReceipt"
-//        #else
-//        let urlString = "https://buy.itunes.apple.com/verifyReceipt"
-//        #endif
-//
-//        guard let reqURL = URL(string: urlString) else {
-//            return
-//        }
-//
-//        var req = URLRequest(url: reqURL)
-//        req.httpMethod = "POST"
-//        let params = [
-//            "receipt-data": receipt.base64EncodedString(),
-//            "password": StoreManager.SECRET
-//        ]
-//        debugPrint(receipt.base64EncodedString())
-//        do {
-//            let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
-//            req.httpBody = jsonData
-//            let task = URLSession.shared.dataTask(with: req, completionHandler: { data, res ,err in
-//
-//                if err != nil {
-//                    debugPrint(err!)
-//                    return
-//                }
-//
-//                if data != nil {
-//                    do {
-//                        guard let dict = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String:Any] else {
-//                            return
-//                        }
-//                        debugPrint(dict)
-//                    } catch (let e) {
-//                        debugPrint(e)
-//                    }
-//                }
-//
-//            })
-//            task.resume()
-//
-//        } catch (let err) {
-//            debugPrint(err)
-//        }
-//
-//    }
-//}

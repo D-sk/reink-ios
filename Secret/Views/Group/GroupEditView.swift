@@ -43,7 +43,7 @@ class GroupEditView: AbstractView {
     
     override func setup() {
         super.setup()
-        _contatListView.tableView.contentInset.bottom = _editButton.frame.height
+        _contatListView._tableView.contentInset.bottom = _editButton.frame.height
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -53,7 +53,7 @@ class GroupEditView: AbstractView {
     }
     
     func setGroup(with group:Group) {
-        _group = group.copy() as! Group
+        _group = group.copy() as? Group
     }
 
     func setGroupMembers(with friends:[Friend], and contacts: [Contact]) {

@@ -15,7 +15,7 @@ protocol ContactListViewDelegate:class {
 
 class ContactListView: AbstractView {
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var _tableView: UITableView!
     
     weak var delegate:ContactListViewDelegate?
     var color:UIColor?
@@ -57,17 +57,17 @@ class ContactListView: AbstractView {
 
 
     func configureTableView(){
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.registerCells(types: [
-            ContactListViewCell.self,
-            ContactListViewHeaderCell.self,
-            HistoryViewCell.self
+        _tableView.delegate = self
+        _tableView.dataSource = self
+        _tableView.registerCells(types: [
+            ContactListViewCell.self as UITableViewCell.Type,
+            ContactListViewHeaderCell.self as UITableViewCell.Type,
+            HistoryViewCell.self as UITableViewCell.Type
             ])
-        tableView.sectionIndexColor = UIColor.Palette.black.color()
-        tableView.sectionIndexBackgroundColor = UIColor.clear
-        tableView.tableFooterView = UIView(frame:CGRect.zero)
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
+        _tableView.sectionIndexColor = UIColor.Palette.black.color()
+        _tableView.sectionIndexBackgroundColor = UIColor.clear
+        _tableView.tableFooterView = UIView(frame:CGRect.zero)
+        _tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height: 1))
     }
     
     
@@ -77,7 +77,7 @@ class ContactListView: AbstractView {
             _sections.insert("★", at: 0)
         }
         _friends = friends
-        tableView.reloadData()
+        _tableView.reloadData()
     }
 
     func setContacts(with contacts:Array<Contact>){
@@ -92,7 +92,7 @@ class ContactListView: AbstractView {
             let key = sectionTitle(String(char))
             _contacts[key]?.append(c)
         }
-        tableView.reloadData()
+        _tableView.reloadData()
     }
 
     fileprivate func isEmpty() -> Bool {
@@ -105,7 +105,7 @@ class ContactListView: AbstractView {
     func setSelectedFriends(with friends: [Friend], and contacts: [Contact]) {
         _selectedFriends.append(contentsOf: friends)
         _selectedContacts.append(contentsOf: contacts)
-        self.tableView.reloadData()
+        _tableView.reloadData()
     }
 
     func sectionTitle(_ string:String) -> String {
@@ -167,7 +167,7 @@ extension ContactListView: UITableViewDataSource {
             let f = _friends[indexPath.row]
             
             if self.isEdit {
-                let cell = tableView.dequeueCell(type: ContactListViewCell.self, indexPath: indexPath)
+                let cell = _tableView.dequeueCell(type: ContactListViewCell.self, indexPath: indexPath)
                 cell.configure(friend: f)
                 if _selectedFriends.index(of: f) == nil {
                     cell.accessoryType = .none
@@ -177,7 +177,7 @@ extension ContactListView: UITableViewDataSource {
                 return cell
             
             } else {
-                let cell = tableView.dequeueCell(type: HistoryViewCell.self, indexPath: indexPath)
+                let cell = _tableView.dequeueCell(type: HistoryViewCell.self, indexPath: indexPath)
                 cell.configure(friend: f)
                 return cell
             }
@@ -225,7 +225,7 @@ extension ContactListView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueCell(type: ContactListViewHeaderCell.self)
+        let cell = _tableView.dequeueCell(type: ContactListViewHeaderCell.self)
         if section == 0 && _friends.count > 0 {
             cell.titleLabel.text = NSLocalizedString("HeaderTitleFriend", comment: "HeaderTitle")
             cell.effectView.backgroundColor = self.color
@@ -252,7 +252,7 @@ extension ContactListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if self.isEdit {
-            guard let cell = tableView.cellForRow(at: indexPath) else {
+            guard let cell = _tableView.cellForRow(at: indexPath) else {
                 return
             }
 
@@ -292,4 +292,3 @@ extension ContactListView: UITableViewDelegate {
         }
     }
 }
-

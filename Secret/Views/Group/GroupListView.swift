@@ -39,8 +39,8 @@ class GroupListView: AbstractView {
         _tableView.isEditing = true
         _tableView.allowsSelectionDuringEditing = true
         _tableView.registerCells(types: [
-            GroupListViewCell.self,
-            GroupAddCell.self
+            GroupListViewCell.self as UITableViewCell.Type,
+            GroupAddCell.self as UITableViewCell.Type
             ])
         _tableView.tableFooterView = UIView(frame:CGRect.zero)
     }

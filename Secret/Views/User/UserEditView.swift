@@ -45,11 +45,8 @@ class UserEditView: AbstractView {
 
     @IBOutlet weak var _updateButton: UIButton!
 
-    fileprivate var _editType: EditType! {
+    fileprivate var _editType: EditType = .email {
         didSet{
-            if _editType == nil {
-                return
-            }
             
             _inputLabelFirst.text = _editType.title(at: 1)
             _inputFieldFirst.placeholder = _editType.placeholder(at: 1)
@@ -119,8 +116,6 @@ class UserEditView: AbstractView {
                 _inputCommentSecond.text = Annotation.shortPassowrd.message()
                 return false
             }
-        default:
-            break
         }
         
         _inputCommentFirst = nil
@@ -149,8 +144,6 @@ class UserEditView: AbstractView {
             self.delegate?.updateDidTap(target:_inputFieldFirst.text!, password: _inputFieldSecond.text!)
         case .password:
             self.delegate?.updateDidTap(target:_inputFieldSecond.text!, password: _inputFieldFirst.text!)
-        default:
-            break
         }
         
     }

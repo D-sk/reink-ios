@@ -41,7 +41,7 @@ enum HelpBook: String {
             let dc = base+"Desc"
             
             var hp = HelpPage()
-            hp.image = UIImage(named: String(format: base+"%d", p))
+            hp.image = UIImage(named: String(format: base+self.rawValue+"%d", p))
             hp.title = NSLocalizedString(String(format: tc+self.rawValue+"%d", p), comment: tc)
             hp.desc = NSLocalizedString(String(format: dc+self.rawValue+"%d", p), comment: dc)
             pages.append(hp)

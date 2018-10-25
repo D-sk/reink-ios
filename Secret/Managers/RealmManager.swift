@@ -196,6 +196,14 @@ class RealmManager: NSObject {
     func latestUpdatedFriend() -> Friend? {
         return _realm.objects(Friend.self).sorted(byKeyPath: "updatedAt", ascending: false).first
     }
+    
+    func messageCount() -> Int {
+        var count = 0
+        for frd in self.friends() {
+            count += frd.messageCount
+        }
+        return count
+    }
 
     // Contact
     func saveContact(_ contact:Contact){

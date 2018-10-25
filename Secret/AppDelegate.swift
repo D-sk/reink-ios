@@ -31,10 +31,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        UIApplication.shared.applicationIconBadgeNumber = RealmManager.shared.messageCount()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        UIApplication.shared.applicationIconBadgeNumber = RealmManager.shared.messageCount()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -47,27 +49,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         })
         
-        if KeychainManager.shared.authToken.isEmpty == false {
+        if UserDefaultsManager.shared.isFirstOpen == false && KeychainManager.shared.authToken.isEmpty == false {
             APIManager.shared.refreshToken(onSuccess:{ token in
                 KeychainManager.shared.authToken = token
             }, onFailure: { err in
                 let ac = AlertManager.shared.alertController(err)
                 application.keyWindow?.rootViewController?.present(ac, animated: true, completion: nil)
             })
+            Account.syncMyAccount()
         }
-        
-        let token = "720b9413058c8b6c2c3047e357b90f226f5f3d2c56b1d6a66cbfd39c88270e13"
-        APIManager.shared.updateDeviceToken(token, onSuccess: {
-        }, onFailure: { err in
-            debugPrint("Failed to enable notification, error: \(err)")
-        })
-
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         SKPaymentQueue.default().remove(StoreManager.shared)
     }
+    
 
 }
 

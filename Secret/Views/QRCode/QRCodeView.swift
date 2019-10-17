@@ -42,7 +42,7 @@ class QRCodeView: AbstractView {
         
         let qr = CIFilter(name: "CIQRCodeGenerator", withInputParameters: ["inputMessage": data, "inputCorrectionLevel": "L"])!
         let sizeTransform = CGAffineTransform(scaleX: 4, y: 4)
-        let qrImage = qr.outputImage!.applying(sizeTransform)
+        let qrImage = qr.outputImage!.transformed(by: sizeTransform)
         self.imageView.image = UIImage(ciImage: qrImage)
         
     }

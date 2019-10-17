@@ -21,7 +21,7 @@ class QRScannerViewController: AbstractViewController {
 
         // Do any additional setup after loading the view.
         self.qrScannerView.delegate = self
-        let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let device = AVCaptureDevice.default(for: AVMediaType.video)!
         do {
             let input = try AVCaptureDeviceInput(device: device)
             session = AVCaptureSession()
@@ -30,10 +30,9 @@ class QRScannerViewController: AbstractViewController {
             let output = AVCaptureMetadataOutput()
             session?.addOutput(output)
             output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            output.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
-            
-            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
-            videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            output.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
+            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: session!)
+            videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             videoPreviewLayer?.frame = view.layer.bounds
             qrScannerView.addVideoPreviewLayer(layer: videoPreviewLayer!)
             
@@ -86,7 +85,7 @@ extension QRScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
         }
         
         if let metadataObj = metadataObjects.first as? AVMetadataMachineReadableCodeObject {
-            if metadataObj.type == AVMetadataObjectTypeQRCode {
+            if metadataObj.type == AVMetadataObject.ObjectType.qr {
                 
                 let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
                 qrCodeFrameView.frame = barCodeObject!.bounds

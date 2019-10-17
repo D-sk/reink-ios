@@ -11,8 +11,8 @@ import Contacts
 import RealmSwift
 
 class PhoneNumber: Object, NSCopying {
-    dynamic var label = ""
-    dynamic var digits = ""
+    @objc dynamic var label = ""
+    @objc dynamic var digits = ""
     
     class func object(from:CNLabeledValue<CNPhoneNumber>)->PhoneNumber{
         let pn = PhoneNumber()

@@ -83,7 +83,7 @@ class AbstractViewController: UIViewController {
 }
 
 extension AbstractViewController {
-    func keyboardWillShow(_ notification:Notification){
+    @objc func keyboardWillShow(_ notification:Notification){
         if let userInfo = (notification as NSNotification).userInfo{
             let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             let transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.size.height)
@@ -93,8 +93,7 @@ extension AbstractViewController {
             }, completion: nil)
         }
     }
-    
-    func keyboardWillHide(_ notification:Notification){
+    @objc func keyboardWillHide(_ notification:Notification){
         if let userInfo = (notification as NSNotification).userInfo{
             let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
             UIView.animate(withDuration: duration, animations: {

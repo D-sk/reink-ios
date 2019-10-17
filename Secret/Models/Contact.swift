@@ -13,11 +13,11 @@ import MessageUI
 
 class Contact: Object, NSCopying {
 
-    dynamic var identifier:String = ""
-    dynamic var givenName:String = ""
-    dynamic var familyName:String = ""
-    dynamic var phonetic:String = ""
-    dynamic var imageData:Data?
+    @objc dynamic var identifier:String = ""
+    @objc dynamic var givenName:String = ""
+    @objc dynamic var familyName:String = ""
+    @objc dynamic var phonetic:String = ""
+    @objc dynamic var imageData:Data?
     let phoneNumbers = List<PhoneNumber>()
     let emailAddresses = List<EmailAddress>()
     let groups = LinkingObjects(fromType: Group.self, property: "contacts")

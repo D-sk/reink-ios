@@ -13,13 +13,13 @@ import AVFoundation
 
 class Friend: Object, NSCopying {
     
-    dynamic var id:Int = 0
-    dynamic var account:Account?
-    dynamic var updatedAt:Date?
-    dynamic var receivedAt:Date?
-    dynamic var messageCount:Int = 0
-    dynamic var isMuted:Bool = false
-    dynamic var isUnlinked:Bool = false
+    @objc dynamic var id:Int = 0
+    @objc dynamic var account:Account?
+    @objc dynamic var updatedAt:Date?
+    @objc dynamic var receivedAt:Date?
+    @objc dynamic var messageCount:Int = 0
+    @objc dynamic var isMuted:Bool = false
+    @objc dynamic var isUnlinked:Bool = false
 
     let groups = LinkingObjects(fromType: Group.self, property: "friends")
     

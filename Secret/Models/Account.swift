@@ -17,12 +17,12 @@ class Account: Object, NSCopying {
         case none = 0
     }
     
-    dynamic var id:Int = 0
-    dynamic var name:String = ""
-    dynamic var imagePath:String?
-    dynamic var phone:String = ""
-    dynamic var email:String = ""
-    dynamic var membership:Int = 0
+    @objc dynamic var id:Int = 0
+    @objc dynamic var name:String = ""
+    @objc dynamic var imagePath:String?
+    @objc dynamic var phone:String = ""
+    @objc dynamic var email:String = ""
+    @objc dynamic var membership:Int = 0
 
     override static func primaryKey() -> String? {
         return "id"

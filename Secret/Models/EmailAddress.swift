@@ -11,8 +11,8 @@ import Contacts
 import RealmSwift
 
 class EmailAddress: Object, NSCopying {
-    dynamic var label = ""
-    dynamic var value = ""
+    @objc dynamic var label = ""
+    @objc dynamic var value = ""
     
     class func object(from:CNLabeledValue<NSString>)->EmailAddress{
         let ea = EmailAddress()

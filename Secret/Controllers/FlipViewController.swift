@@ -252,7 +252,7 @@ extension FlipViewController{
         return gesture
     }
     
-    func handlePanGesture(_ gesture:UIPanGestureRecognizer){
+    @objc func handlePanGesture(_ gesture:UIPanGestureRecognizer){
         let translation = gesture.translation(in: gesture.view)
         let velocity = gesture.velocity(in: gesture.view)
         

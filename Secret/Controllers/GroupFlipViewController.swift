@@ -309,7 +309,7 @@ class GroupFlipViewController: FlipViewController {
         }
     }
 
-    func syncContacts(){
+    @objc func syncContacts(){
         Friend.list(onSuccess:nil, onFailure:{ [weak self] err in
             self?.presentAlertController(with: err)
         })

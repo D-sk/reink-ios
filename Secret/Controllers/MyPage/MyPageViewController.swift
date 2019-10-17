@@ -56,7 +56,7 @@ class MyPageViewController: AbstractViewController {
 
 extension MyPageViewController {
     
-    func handlePanGesture(_ sender:UIPanGestureRecognizer){
+    @objc func handlePanGesture(_ sender:UIPanGestureRecognizer){
         switch sender.state {
         case .began:
             self.transition.isInteractive = true

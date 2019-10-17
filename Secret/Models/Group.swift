@@ -11,11 +11,11 @@ import RealmSwift
 
 class Group: Object, NSCopying {
     
-    dynamic var id = UUID().uuidString
-    dynamic var name = ""
-    dynamic var colorKey = 4
-    dynamic var displayOrder = 0
-    dynamic var isEditable = true
+    @objc dynamic var id = UUID().uuidString
+    @objc dynamic var name = ""
+    @objc dynamic var colorKey = 4
+    @objc dynamic var displayOrder = 0
+    @objc dynamic var isEditable = true
     let friends = List<Friend>()
     let contacts = List<Contact>()
     

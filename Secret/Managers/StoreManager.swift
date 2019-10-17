@@ -45,7 +45,7 @@ class StoreManager: NSObject {
     weak var restoreDelegate: StoreManagerRestoreDelegate?
     
     private var _request: SKProductsRequest!
-    dynamic var products = [SKProduct]()
+    @objc dynamic var products = [SKProduct]()
     
     static let PRODUCT_ID = "tokyo.reink.msgapp.basic"
     static let SECRET = "afbc22d79a0144f891dcb1f9815d50fa"

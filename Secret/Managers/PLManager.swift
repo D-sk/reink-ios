@@ -16,7 +16,7 @@ class PLManager: NSObject {
     
 
     func cameraController(completion:@escaping (_ completed:Bool, _ image:UIImage?, _ fileName:String?)->Void) -> UIImagePickerController?{
-        switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo){
+        switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video){
         case .denied, .restricted:
             return nil
         default:
@@ -86,7 +86,7 @@ extension PLManager: UIImagePickerControllerDelegate, UINavigationControllerDele
         }
     }
     
-    func imageDidSave(_ image: UIImage, didFinishSavingWithError error: NSError!, contextInfo: UnsafeMutableRawPointer) {
+    @objc func imageDidSave(_ image: UIImage, didFinishSavingWithError error: NSError!, contextInfo: UnsafeMutableRawPointer) {
         
         if error == nil {
             let options = PHFetchOptions()

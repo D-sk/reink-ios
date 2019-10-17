@@ -966,6 +966,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1441,7 +1442,7 @@
 				PROVISIONING_PROFILE = "9be15d3b-02d0-4d01-9cb2-34bd47de6324";
 				PROVISIONING_PROFILE_SPECIFIER = Development;
 				SWIFT_OBJC_BRIDGING_HEADER = "Secret/Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1461,7 +1462,7 @@
 				PROVISIONING_PROFILE = "f42e6696-0e3c-47bb-9c26-b7ade6ac1b62";
 				PROVISIONING_PROFILE_SPECIFIER = Production;
 				SWIFT_OBJC_BRIDGING_HEADER = "Secret/Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

@@ -11,10 +11,10 @@ import RealmSwift
 
 class User: Object {
 
-    dynamic var uuid: String = ""
-    dynamic var uname: String = ""
-    dynamic var email: String = ""
-    dynamic var account: Account?
+    @objc dynamic var uuid: String = ""
+    @objc dynamic var uname: String = ""
+    @objc dynamic var email: String = ""
+    @objc dynamic var account: Account?
     
     override static func primaryKey() -> String? {
         return "uuid"

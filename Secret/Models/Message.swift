@@ -11,10 +11,10 @@ import RealmSwift
 
 class Message: Object {
 
-    dynamic var id: Int = 0
-    dynamic var sender:Account?
-    dynamic var body:String = ""
-    dynamic var createdAt:Date = Date()
+    @objc dynamic var id: Int = 0
+    @objc dynamic var sender:Account?
+    @objc dynamic var body:String = ""
+    @objc dynamic var createdAt:Date = Date()
     
     override static func primaryKey() -> String? {
         return "id"

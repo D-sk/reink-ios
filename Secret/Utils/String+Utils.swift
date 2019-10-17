@@ -71,9 +71,8 @@ extension String {
     var isAllHankaku: Bool {
         
         let charlen = self.count
-        let utf8 = (self as NSString).utf8String
-        
-        if charlen == Int(bitPattern: strlen(utf8)) {
+        let utf8 = (self as NSString).utf8String!
+        if charlen == strlen(utf8) {
             return true
         }
         
